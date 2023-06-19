@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: scheduler_app
+    volumes:
+      - .:/home/node/app
+    ports:
+      - 3050:4000
+    depends_on:
+      - db
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    networks:
+      - clipboard_h_network
+
+  db:
+    image: postgres:15
+    container_name: scheduler_db
+    ports:
+      - 3051:5432
+    volumes:
+      - ~/.docker-conf/thc-cbh/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    networks:
+      - clipboard_h_network
+
+networks:
+  clipboard_h_network:
+    driver: bridge
