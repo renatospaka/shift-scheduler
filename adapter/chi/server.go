@@ -18,7 +18,7 @@ type HttpServer struct {
 }
 
 func NewHttpServer(ctx context.Context) *HttpServer {
-	log.Println("iniciando conexão com o servidor web")
+	log.Println("initiating web seerver")
 	httpServer := &HttpServer{
 		ctx:         ctx,
 		// controllers: controller,
@@ -35,17 +35,6 @@ func (s *HttpServer) connect() {
 	s.Server.Use(middlewares.Cors)
 	// s.Server.Use(middleware.WithValue("jwt", configs.TokenAuth))
 	// s.Server.Use(middleware.WithValue("JWTExpiresIn", configs.JWTExpiresIn))
-
-	// s.Server.Route("/transactions", func(r chi.Router) {
-	// 	// // r.Use(jwtauth.Verifier(configs.TokenAuth))
-	// 	// // r.Use(jwtauth.Authenticator)
-
-	// 	r.Post("/", s.controllers.Process)
-	// 	r.Get("/{id}", s.controllers.Get)
-	// 	r.Get("/", s.controllers.GetAll)
-	// 	r.Put("/{id}", s.controllers.Modify)
-	// 	r.Delete("/{id}", s.controllers.Remove)
-	// })
 
 	s.Server.Route("/health", func(r chi.Router) {
 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {

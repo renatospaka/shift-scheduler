@@ -2,6 +2,7 @@ package entity
 
 import (
 	"errors"
+	"log"
 	"strings"
 )
 
@@ -14,6 +15,8 @@ type Worker struct {
 }
 
 func NewWorker(id int, isActive bool, name, profession string) (*Worker, error ) {
+	log.Println("initiating worker entity")
+	
 	worker := &Worker{
 		id:         id,
 		isActive:   isActive,
