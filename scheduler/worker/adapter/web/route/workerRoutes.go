@@ -2,18 +2,19 @@ package route
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/go-chi/chi"
-	http "github.com/renatospaka/scheduler/adapter/chi"
+	httpServer "github.com/renatospaka/scheduler/adapter/chi"
 	"github.com/renatospaka/scheduler/scheduler/worker/adapter/web/controller"
 )
 
 type WorkerRoute struct {
-	server      *http.HttpServer
+	server      *httpServer.HttpServer
 	controllers *controller.WorkerController
 }
 
-func NewWorkerRoute(server *http.HttpServer, controllers *controller.WorkerController) *WorkerRoute {
+func NewWorkerRoute(server *httpServer.HttpServer, controllers *controller.WorkerController) *WorkerRoute {
 	log.Println("initiating worker routes")
 
 	return &WorkerRoute{
@@ -29,6 +30,9 @@ func (w *WorkerRoute) Routes() {
 		// r.Use(jwtauth.Verifier(configs.TokenAuth))
 		// r.Use(jwtauth.Authenticator)
 
+		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("Hello Workers"))
+		})
 		r.Get("/{id}", w.controllers.Get)
 	})
 }

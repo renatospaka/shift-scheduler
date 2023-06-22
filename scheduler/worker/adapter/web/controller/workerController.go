@@ -19,8 +19,8 @@ func NewWorkerController(usecases *usecase.WorkerUsecase) *WorkerController {
 	}
 }
 
-func (c *WorkerController) Get(w http.ResponseWriter, r *http.Request) {
-	log.Println("scheduler.worker.adapter.web.controller.Get")
-	
-	panic("implement me")
+
+// Gets only the Worker identified by the given id
+func (c *WorkerController) Get(w http.ResponseWriter, r *http.Request) {	
+	c.getOneWorker(w, r)
 }

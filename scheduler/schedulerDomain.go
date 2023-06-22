@@ -10,24 +10,23 @@ import (
 )
 
 type SchedulerDomain struct {
-	Ctx        context.Context
-	DB         *sql.DB
+	Ctx       context.Context
+	DB        *sql.DB
 	WebServer *httpServer.HttpServer
-	worker *workerDomain.WorkerDomain
+	worker    *workerDomain.WorkerDomain
 }
 
 // start the scheduler core
 func NewSchedulerDomain(ctx context.Context, db *sql.DB) *SchedulerDomain {
 	log.Println("initiating scheduler domain application")
 	s := &SchedulerDomain{
-		Ctx:       ctx,
-		DB:        db,
+		Ctx: ctx,
+		DB:  db,
 	}
 
 	s.InitiateHttp()
 	return s
 }
-
 
 // Start web seerver adapter
 func (s *SchedulerDomain) InitiateHttp() {
@@ -36,4 +35,3 @@ func (s *SchedulerDomain) InitiateHttp() {
 	s.worker = workerDomain.NewWorker(s.Ctx, s.DB, s.WebServer)
 	s.worker.StartWorkDomain()
 }
-

@@ -20,6 +20,6 @@ func NewWorkerUsecase(repo repository.WorkerInterface) *WorkerUsecase {
 }
 
 func (u *WorkerUsecase) GetWorker(id int) (*entity.Worker, error) {
-	log.Println("scheduler.worker.core.usecase.GetWorker")
-	return nil, nil
+	log.Printf("try to get worker #%d\n", id)
+	return u.getWorker(id)
 }
