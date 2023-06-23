@@ -12,15 +12,15 @@ import (
 )
 
 type HttpServer struct {
-	ctx         context.Context
+	ctx context.Context
 	// controllers *controller.TransactionController
-	Server      *chi.Mux
+	Server *chi.Mux
 }
 
 func NewHttpServer(ctx context.Context) *HttpServer {
-	log.Println("initiating web seerver")
+	log.Println("initiating web server")
 	httpServer := &HttpServer{
-		ctx:         ctx,
+		ctx: ctx,
 		// controllers: controller,
 	}
 	httpServer.connect()

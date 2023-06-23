@@ -178,7 +178,7 @@ func TestDeletiondToDate(t *testing.T) {
 	trail := trail.NewTrailDate()
 	assert.NotNil(t, trail)
 	createdAtOrig := trail.CreatedAt().Format("2006-01-02T15:04:05 -07:00:00")
-	updatedAtOrig := trail.CreatedAt().Format("2006-01-02T15:04:05 -07:00:00")
+	// updatedAtOrig := trail.CreatedAt().Format("2006-01-02T15:04:05 -07:00:00")
 
 	time.Sleep(1 * time.Second)
 	trail.SetDeletionToDate(date)
@@ -195,5 +195,5 @@ func TestDeletiondToDate(t *testing.T) {
 
 	updatedAt := trail.UpdatedAt().Format("2006-01-02T15:04:05 -07:00:00")
 	assert.NotNil(t, updatedAt)
-	assert.Equal(t, updatedAtOrig, updatedAt)
+	assert.Equal(t, deletedAt, updatedAt)
 }
