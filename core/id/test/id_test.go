@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	"github.com/renatospaka/scheduler/utils/id"
+	"github.com/renatospaka/scheduler/core/id"
 	"github.com/stretchr/testify/assert"
 )
 

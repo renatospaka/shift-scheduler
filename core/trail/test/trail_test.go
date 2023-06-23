@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/renatospaka/scheduler/utils/trail"
+	"github.com/renatospaka/scheduler/core/trail"
 	"github.com/stretchr/testify/assert"
 )
 
