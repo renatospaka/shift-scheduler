@@ -23,14 +23,14 @@ func (c *WorkerController) getOneWorker(w http.ResponseWriter, r *http.Request) 
 	param := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(param)
 	if err != nil {
-		out.StandardStatusOutputDto = formatStatus(pkgController.REQUEST_FAILURE, http.StatusBadRequest, "worker id must be a number")
+		out.StandardStatusOutputDto = pkgController.FormatStatus(pkgController.REQUEST_FAILURE, http.StatusBadRequest, "worker id must be a number")
 		w.WriteHeader(out.Error.Code)
 		json.NewEncoder(w).Encode(out)
 		return
 	}
 
 	if id <= 0 {
-		out.StandardStatusOutputDto = formatStatus(pkgController.REQUEST_FAILURE, http.StatusBadRequest, "invalid worker id")
+		out.StandardStatusOutputDto = pkgController.FormatStatus(pkgController.REQUEST_FAILURE, http.StatusBadRequest, "invalid worker id")
 		out.ID = id
 		w.WriteHeader(out.Error.Code)
 		json.NewEncoder(w).Encode(out)
@@ -41,7 +41,7 @@ func (c *WorkerController) getOneWorker(w http.ResponseWriter, r *http.Request) 
 	in = usecase.GetWorkerByIdInputDto{ID: id}
 	worker, err := c.usecases.GetWorkerById(in)
 	if err != nil {
-		out.StandardStatusOutputDto = formatStatus(pkgController.REQUEST_FAILURE, http.StatusInternalServerError, fmt.Sprintf("error: %s", err.Error()))
+		out.StandardStatusOutputDto = pkgController.FormatStatus(pkgController.REQUEST_FAILURE, http.StatusInternalServerError, fmt.Sprintf("error: %s", err.Error()))
 		w.WriteHeader(out.Error.Code)
 		json.NewEncoder(w).Encode(out)
 		return

@@ -42,6 +42,7 @@ func NewWorker(ctx context.Context, db *sql.DB, webServer *httpServer.HttpServer
 
 // Set up all necessary structs to start the Worker Domain
 func (w *WorkerDomain) StartWorkDomain() error {
+	log.Println("--------------------------------------")
 	log.Println("initiating worker domain application")
 
 	w.repo = repository.NewWorkerRepository(w.domain.db)
