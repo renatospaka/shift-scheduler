@@ -6,8 +6,9 @@ import (
 	"log"
 
 	httpServer "github.com/renatospaka/scheduler/adapter/chi"
-	workerDomain "github.com/renatospaka/scheduler/scheduler/worker"
 	"github.com/renatospaka/scheduler/adapter/event"
+	doctoDomain "github.com/renatospaka/scheduler/scheduler/document"
+	workerDomain "github.com/renatospaka/scheduler/scheduler/worker"
 )
 
 type SchedulerDomain struct {
@@ -16,6 +17,7 @@ type SchedulerDomain struct {
 	WebServer  *httpServer.HttpServer
 	Dispatcher *event.EventDispatcher
 	worker     *workerDomain.WorkerDomain
+	document   *doctoDomain.DocumentDomain
 }
 
 // start the scheduler core
@@ -40,4 +42,8 @@ func (s *SchedulerDomain) InitiateWebServer() {
 
 	s.worker = workerDomain.NewWorker(s.Ctx, s.DB, s.WebServer, s.Dispatcher)
 	s.worker.StartWorkDomain()
+
+	s.document = doctoDomain.NewDocument(s.Ctx, s.DB, s.WebServer)
+	s.document.StartDocumentDomain()
+
 }

@@ -8,5 +8,5 @@ import (
 
 type DocumentInterface interface {
 	SetContext(context.Context)
-	GetWorker(id int) (*entity.Document, error) 
+	GetDocument(id int) (*entity.Document, error) 
 }

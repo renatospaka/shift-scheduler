@@ -1,16 +1,15 @@
 package controller
 
 import (
-	pkgController "github.com/renatospaka/scheduler/adapter/web/controller"
 	"github.com/renatospaka/scheduler/core/dto"
 )
 
-func formatStatus(status string, code int, msg string) dto.StandardStatusOutputDto {
+func FormatStatus(status string, code int, msg string) dto.StandardStatusOutputDto {
 	statusDto := dto.StandardStatusOutputDto{}
 	statusErrDto := dto.StandardErrorOutputDto{}
 
 	if status == "" {
-		statusDto.Status = pkgController.REQUEST_FAILURE
+		statusDto.Status = REQUEST_FAILURE
 	} else {
 		statusDto.Status = status
 	}
