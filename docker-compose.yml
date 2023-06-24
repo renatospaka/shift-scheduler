@@ -7,7 +7,7 @@ services:
     volumes:
       - .:/home/node/app
     ports:
-      - 3050:4000
+      - 3050:8000
     depends_on:
       - db
     extra_hosts:
