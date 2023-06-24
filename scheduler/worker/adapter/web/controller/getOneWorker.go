@@ -2,57 +2,58 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/go-chi/chi"
-	"github.com/renatospaka/scheduler/core/dto"
-	"github.com/renatospaka/scheduler/core/errorList"
+	pkgController "github.com/renatospaka/scheduler/adapter/web/controller"
+	"github.com/renatospaka/scheduler/scheduler/worker/core/usecase"
 )
 
-type getWorker struct {
-	Procedure string `json:"procedure`
-	Id        int    `json:"worker_id"`
-}
+var (
+	in  usecase.GetWorkerByIdInputDto
+	out usecase.GetWorkerByIdOutputDto
+)
 
 func (c *WorkerController) getOneWorker(w http.ResponseWriter, r *http.Request) {
 	log.Println("scheduler.worker.adapter.web.controller.Get")
 
 	param := chi.URLParam(r, "id")
-	log.Printf("param: %v\n", param)
 	id, err := strconv.Atoi(param)
 	if err != nil {
-		log.Println("error converting to int")
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error: " + err.Error())
-		return
-	} else if id <= 0 {
-		log.Println(errorList.ErrWorkerIdInvalid.Error())
-		w.WriteHeader(http.StatusBadRequest)
+		out.StandardStatusOutputDto = formatStatus(pkgController.REQUEST_FAILURE, http.StatusBadRequest, "worker id must be a number")
+		w.WriteHeader(out.Error.Code)
+		json.NewEncoder(w).Encode(out)
 		return
 	}
 
-	worker, err := c.usecases.GetWorker(id)
+	if id <= 0 {
+		out.StandardStatusOutputDto = formatStatus(pkgController.REQUEST_FAILURE, http.StatusBadRequest, "invalid worker id")
+		out.ID = id
+		w.WriteHeader(out.Error.Code)
+		json.NewEncoder(w).Encode(out)
+		return
+	}
+
+	// Finally gets the worker by id
+	in = usecase.GetWorkerByIdInputDto{ID: id}
+	worker, err := c.usecases.GetWorkerById(in)
 	if err != nil {
-		failures := dto.ErrorTraillerDto{}
-		failure := dto.ErrorDto{
-			Error: err.Error(),
-		}
-		failures.Errors = append(failures.Errors, failure)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(failures.Errors)
+		out.StandardStatusOutputDto = formatStatus(pkgController.REQUEST_FAILURE, http.StatusInternalServerError, fmt.Sprintf("error: %s", err.Error()))
+		w.WriteHeader(out.Error.Code)
+		json.NewEncoder(w).Encode(out)
 		return
 	}
 
-	if worker == nil {
-		failures := dto.ErrorTraillerDto{}
-		failure := dto.ErrorDto{
-			Error: errorList.ErrWorkerIdNotFound.Error(),
-		}
-		failures.Errors = append(failures.Errors, failure)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(failures.Errors)
+	if worker.Status == pkgController.REQUEST_FAILURE {
+		w.WriteHeader(worker.Error.Code)
+		json.NewEncoder(w).Encode(worker.Error.Message)
 		return
 	}
+
+	// Everything went well and the worker was found
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(worker)
 }

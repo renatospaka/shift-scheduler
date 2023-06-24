@@ -15,6 +15,6 @@ func (l *workerGottenListener) SetData(data interface{}) {
 }
 
 func (l *workerGottenListener) Handle() error {
-	log.Println("...stuff rrelated to worker fetching")
+	log.Println("...event related to worker fetching")
 	return nil
 }

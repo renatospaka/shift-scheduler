@@ -1,15 +1,16 @@
 package usecase
 
 import (
+	"context"
 	"log"
 
 	"github.com/renatospaka/scheduler/adapter/event"
-	"github.com/renatospaka/scheduler/scheduler/worker/core/entity"
 	eventWorker "github.com/renatospaka/scheduler/scheduler/worker/core/event"
 	"github.com/renatospaka/scheduler/scheduler/worker/core/repository"
 )
 
 type WorkerUsecase struct {
+	ctx        context.Context
 	repo       repository.WorkerInterface
 	dispatcher *event.EventDispatcher
 }
@@ -26,8 +27,15 @@ func NewWorkerUsecase(repo repository.WorkerInterface, dispatcher *event.EventDi
 	return usecases
 }
 
-func (u *WorkerUsecase) GetWorker(id int) (*entity.Worker, error) {
-	log.Printf("try to get worker #%d\n", id)
+func (u *WorkerUsecase) GetWorkerById(in GetWorkerByIdInputDto) (GetWorkerByIdOutputDto, error) {
+	return u.getWorkerById(in)
+}
 
-	return u.getWorker(id)
+func (u *WorkerUsecase) SetContext(ctx context.Context) {
+	u.ctx = ctx
+	u.repo.SetContext(ctx)
+}
+
+func (u *WorkerUsecase) Context() context.Context {
+	return u.ctx
 }

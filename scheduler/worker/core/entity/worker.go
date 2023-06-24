@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"errors"
 	"log"
 	"strings"
 )
@@ -98,9 +97,3 @@ func (w *Worker) Validate() error {
 	w.isValid = true
 	return nil
 }
-
-var (
-	ErrWorkerIDIsMissing = errors.New("id is missing")
-	ErrWorkerNameIsMissing = errors.New("name is missing")
-	ErrWorkerProfessionIsMissing = errors.New("profession is missing")
-)

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 	"log"
 
@@ -8,18 +9,22 @@ import (
 )
 
 type WorkerRepository struct {
-	DB *sql.DB
+	DB  *sql.DB
+	ctx context.Context
 }
 
 func NewWorkerRepository(db *sql.DB) *WorkerRepository {
 	log.Println("initiating worker repository")
-	
+
 	return &WorkerRepository{
 		DB: db,
 	}
 }
 
 func (w *WorkerRepository) GetWorker(id int) (*entity.Worker, error) {
-	log.Println("scheduler.worker.adapter.postgres.GetWorker")
-	return nil, nil
+	return w.getWorkerById(w.ctx, id)
+}
+
+func (w *WorkerRepository) SetContext(ctx context.Context) {
+	w.ctx = ctx
 }

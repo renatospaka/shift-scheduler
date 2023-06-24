@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -23,7 +24,8 @@ func main() {
 
 	// start database server
 	log.Println("initiating database connection")
-	conn := "postgresql://" + configs.DBUser + ":" + configs.DBPassword + "@" + configs.DBHost + ":" + configs.DBPort + "/" + configs.DBName + "?sslmode=disable"
+	
+	conn := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", configs.DBUser, configs.DBPassword, configs.DBHost, configs.DBPort, configs.DBName)
 	db, err := sql.Open("postgres", conn)
 	if err != nil {
 		log.Panic(err)
