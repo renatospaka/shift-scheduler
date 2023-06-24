@@ -30,6 +30,9 @@ func (u *WorkerUsecase) getWorkerById(in GetWorkerByIdInputDto) (GetWorkerByIdOu
 	if err != nil {
 		return GetWorkerByIdOutputDto{}, err
 	}
+	if worker == nil {
+		return GetWorkerByIdOutputDto{}, entity.ErrWorkerIdNotFound
+	}
 
 	out := GetWorkerByIdOutputDto{
 		ID:                      worker.ID(),

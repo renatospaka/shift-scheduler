@@ -29,6 +29,9 @@ func (u *DocumentUsecase) getDocumentById(in GetDocumentByIdInputDto) (GetDocume
 	if err != nil {
 		return GetDocumentByIdOutputDto{}, err
 	}
+	if docto == nil {
+		return GetDocumentByIdOutputDto{}, entity.ErrDocumentIdNotFound
+	}
 
 	out := GetDocumentByIdOutputDto{
 		ID:                      docto.ID(),
