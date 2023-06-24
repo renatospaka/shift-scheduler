@@ -10,4 +10,6 @@ var (
 	ErrWorkerIDIsMissing         = errors.New("worker id is missing")
 	ErrWorkerNameIsMissing       = errors.New("worker name is missing")
 	ErrWorkerProfessionIsMissing = errors.New("worker profession is missing")
+	
+	ErrWorkerDocumentIdInvalid           = errors.New("invalid worker x document id")
 )
