@@ -22,10 +22,6 @@ func (w *WorkerRepository) getWorkerById(ctx context.Context, id int) (*entity.W
 	defer stmt.Close()
 
 	rows := stmt.QueryRow(id)
-	if err != nil {
-		return nil, err
-	}
-
 	var (
 		name       sql.NullString
 		profession sql.NullString

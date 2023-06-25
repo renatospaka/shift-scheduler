@@ -31,6 +31,10 @@ func (u *WorkerUsecase) GetWorkerById(in GetWorkerByIdInputDto) (GetWorkerByIdOu
 	return u.getWorkerById(in)
 }
 
+func (u *WorkerUsecase) GetWorkerWithDocumentsById(in GetWorkerWithDocumentsByIdInputDto) (GetWorkerWithDocumentsByIdOutputDto, error) {
+	return u.getWorkerWithDocumentsById(in)
+}
+
 func (u *WorkerUsecase) SetContext(ctx context.Context) {
 	u.ctx = ctx
 	u.repo.SetContext(ctx)

@@ -9,4 +9,5 @@ import (
 type WorkerInterface interface {
 	SetContext(context.Context)
 	GetWorker(id int) (*entity.Worker, error) 
+	GetWorkerWithDocuments(id int) (*entity.Worker, error) 
 }

@@ -24,3 +24,8 @@ func NewWorkerController(usecases *usecase.WorkerUsecase) *WorkerController {
 func (c *WorkerController) Get(w http.ResponseWriter, r *http.Request) {	
 	c.getOneWorker(w, r)
 }
+
+// Gets only the Worker identified by the given id with all related documents
+func (c *WorkerController) GetWithDocuments(w http.ResponseWriter, r *http.Request) {	
+	c.getOneWorkerWithDocuments(w, r)
+}

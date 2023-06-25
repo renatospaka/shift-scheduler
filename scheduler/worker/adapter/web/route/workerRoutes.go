@@ -2,7 +2,6 @@ package route
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/go-chi/chi"
 	httpServer "github.com/renatospaka/scheduler/adapter/chi"
@@ -30,9 +29,7 @@ func (w *WorkerRoute) Routes() {
 		// r.Use(jwtauth.Verifier(configs.TokenAuth))
 		// r.Use(jwtauth.Authenticator)
 
-		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("Hello Workers"))
-		})
 		r.Get("/{id}", w.controllers.Get)
+		r.Get("/{id}/WithDocuments", w.controllers.GetWithDocuments)
 	})
 }

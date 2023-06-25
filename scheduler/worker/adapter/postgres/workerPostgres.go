@@ -25,6 +25,10 @@ func (w *WorkerRepository) GetWorker(id int) (*entity.Worker, error) {
 	return w.getWorkerById(w.ctx, id)
 }
 
+func (w *WorkerRepository) GetWorkerWithDocuments(id int) (*entity.Worker, error) {
+	return w.getWorkerWithDocumentsById(w.ctx, id)
+}
+
 func (w *WorkerRepository) SetContext(ctx context.Context) {
 	w.ctx = ctx
 }

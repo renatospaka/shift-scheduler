@@ -45,5 +45,4 @@ func (s *SchedulerDomain) InitiateWebServer() {
 
 	s.document = doctoDomain.NewDocument(s.Ctx, s.DB, s.WebServer)
 	s.document.StartDocumentDomain()
-
 }
