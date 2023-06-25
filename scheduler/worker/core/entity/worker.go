@@ -16,28 +16,23 @@ type Worker struct {
 	documents  []*WorkerDocument
 }
 
-type WorkerDocument struct {
-	id       int
-	document *entity.Document
-}
-
 func NewWorker(id int, isActive bool, name, profession string) (*Worker, error) {
 	log.Println("initiating worker entity")
 
-	worker := &Worker{
+	w := &Worker{
 		id:         id,
 		isActive:   isActive,
 		isValid:    false,
 		name:       name,
 		profession: profession,
 	}
-	worker.documents = make([]*WorkerDocument, 0)
-	err := worker.Validate()
-
+	w.documents = make([]*WorkerDocument, 0)
+	
+	err := w.Validate()
 	if err != nil {
 		return nil, err
 	}
-	return worker, nil
+	return w, nil
 }
 
 func (w *Worker) ID() int {
@@ -143,14 +138,6 @@ func (w *Worker) WorkerDocument(id int) *WorkerDocument {
 	return nil
 }
 
-func (wd *WorkerDocument) ID() int {
-	return wd.id
-} 
-
-func (wd *WorkerDocument) Document() *entity.Document {
-	return wd.document
-} 
-
 func (w *Worker) IsValid() bool {
 	return w.isValid
 }
@@ -170,6 +157,26 @@ func (w *Worker) Validate() error {
 		return ErrWorkerProfessionIsMissing
 	}
 
+	err := w.validateDocuments()
+	if err != nil {
+		return err
+	}
+
 	w.isValid = true
+	return nil
+}
+
+func (w *Worker) validateDocuments() error {
+	if  len(w.documents) == 0 {
+		return nil
+	}
+
+	for _, docto := range w.documents {
+		err := docto.Validate()
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
