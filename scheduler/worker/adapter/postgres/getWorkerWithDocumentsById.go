@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"log"
 
+	entityDocto "github.com/renatospaka/scheduler/scheduler/document/core/entity"
 	"github.com/renatospaka/scheduler/scheduler/worker/core/entity"
-	entityDocto"github.com/renatospaka/scheduler/scheduler/document/core/entity"
 )
 
 func (w *WorkerRepository) getWorkerWithDocumentsById(ctx context.Context, id int) (*entity.Worker, error) {
@@ -34,26 +34,38 @@ func (w *WorkerRepository) getWorkerWithDocumentsById(ctx context.Context, id in
 	if err != nil {
 		return nil, err
 	}
-	
-	var worker *entity.Worker
+
 	var (
-		count						int
-		name             sql.NullString
-		profession       sql.NullString
-		active           sql.NullBool
-		documentWorkerId sql.NullInt16
-		documentId       sql.NullInt16
-		documentName     sql.NullString
-		documentActive   sql.NullBool
+		count  int
+		worker *entity.Worker
 	)
-	
+
 	for rows.Next() {
+		var (
+			name             sql.NullString
+			profession       sql.NullString
+			active           sql.NullBool
+			documentWorkerId sql.NullInt16
+			documentId       sql.NullInt16
+			documentName     sql.NullString
+			documentActive   sql.NullBool
+		)
+
+		/* 
+	SELECT w.name, 
+				w.profession, 
+				w.is_active, 
+				dw.id AS document_worker_id,
+				d.id AS document_id, 
+				d.name AS document_name, 
+				d.is_active AS document_is_active
+		*/
 		err = rows.Scan(
-			&name, 
-			&profession, 
+			&name,
+			&profession,
 			&active,
 			&documentWorkerId,
-			&documentId, 
+			&documentId,
 			&documentName,
 			&documentActive,
 		)
@@ -91,7 +103,6 @@ func (w *WorkerRepository) getWorkerWithDocumentsById(ctx context.Context, id in
 		if err != nil {
 			return nil, err
 		}
-
 		count++
 	}
 
@@ -102,5 +113,5 @@ func (w *WorkerRepository) getWorkerWithDocumentsById(ctx context.Context, id in
 		}
 		return nil, err
 	}
-	return worker, nil 
+	return worker, nil
 }

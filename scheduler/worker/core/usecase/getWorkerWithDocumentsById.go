@@ -3,8 +3,8 @@ package usecase
 import (
 	"log"
 
+	pkgController "github.com/renatospaka/scheduler/adapter/web/controller"
 	"github.com/renatospaka/scheduler/core/dto"
-	doctoUsecase "github.com/renatospaka/scheduler/scheduler/document/core/usecase"
 	"github.com/renatospaka/scheduler/scheduler/worker/core/entity"
 )
 
@@ -21,8 +21,14 @@ type GetWorkerWithDocumentsByIdOutputDto struct {
 }
 
 type GetWorkerDocumentsOutputDto struct {
-	ID       int                                   `json:"worker_document_id"`
-	Document doctoUsecase.GetDocumentByIdOutputDto `json:"document"`
+	ID       int                        `json:"worker_document_id"`
+	Document GetWorkerDocumentOutputDto `json:"document"`
+}
+
+type GetWorkerDocumentOutputDto struct {
+	ID       int    `json:"document_id"`
+	Name     string `json:"name"`
+	IsActive bool   `json:"is_active"`
 }
 
 func (u *WorkerUsecase) getWorkerWithDocumentsById(in GetWorkerWithDocumentsByIdInputDto) (GetWorkerWithDocumentsByIdOutputDto, error) {
@@ -39,5 +45,29 @@ func (u *WorkerUsecase) getWorkerWithDocumentsById(in GetWorkerWithDocumentsById
 		return GetWorkerWithDocumentsByIdOutputDto{}, entity.ErrWorkerIdNotFound
 	}
 
-	return GetWorkerWithDocumentsByIdOutputDto{}, nil
+	out := GetWorkerWithDocumentsByIdOutputDto{
+		ID:        worker.ID(),
+		Name:      worker.Name(),
+		IsActive:  worker.IsActive(),
+		Documents: []GetWorkerDocumentsOutputDto{},
+		StandardStatusOutputDto: dto.StandardStatusOutputDto{
+			Status: pkgController.REQUEST_SUCCESS,
+		},
+	}
+
+	for _, docto := range worker.Documents() {
+		inner := docto.Document()
+		document := GetWorkerDocumentsOutputDto{
+			ID: docto.ID(),
+			Document: GetWorkerDocumentOutputDto{
+				ID:       inner.ID(),
+				Name:     inner.Name(),
+				IsActive: inner.IsActive(),
+			},
+		}
+
+		out.Documents = append(out.Documents, document)
+	}
+
+	return out, nil
 }
