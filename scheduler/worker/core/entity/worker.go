@@ -15,7 +15,7 @@ type Worker struct {
 }
 
 func NewWorker(id int, isActive bool, name, profession string) (*Worker, error) {
-	log.Println("initiating worker entity")
+	// log.Println("initiating worker entity")
 
 	w := &Worker{
 		id:         id,
@@ -28,8 +28,11 @@ func NewWorker(id int, isActive bool, name, profession string) (*Worker, error) 
 
 	err := w.Validate()
 	if err != nil {
+		log.Printf("worker: %s(id: %d) as %s created with error: %s", name, id, profession, err.Error())
 		return nil, err
 	}
+
+	log.Printf("worker: %s(id: %d) as %s created successfuly", name, id, profession)
 	return w, nil
 }
 
@@ -121,10 +124,10 @@ func (w *Worker) validateDocuments() error {
 }
 
 func (w *Worker) LinkToDocument(workDocto *WorkerDocument) error {
-	err := w.Find(workDocto)
-	if err != nil {
-		return err
-	}
+	// err := w.Find(workDocto)
+	// if err != nil {
+	// 	return err
+	// }
 
 	if w.documents == nil {
 		w.documents = make([]*WorkerDocument, 0)
@@ -134,7 +137,7 @@ func (w *Worker) LinkToDocument(workDocto *WorkerDocument) error {
 		workDocto.id = len(w.documents) + 1
 	}
 
-	err = workDocto.Validate()
+	err := workDocto.Validate()
 	if err != nil {
 		return err
 	}

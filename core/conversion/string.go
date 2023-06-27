@@ -1,4 +1,4 @@
-package strings
+package conversion
 
 import (
 	"database/sql"

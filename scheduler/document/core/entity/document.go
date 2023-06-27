@@ -6,26 +6,29 @@ import (
 )
 
 type Document struct {
-	id         int
-	isActive   bool
-	isValid    bool
-	name       string
+	id       int
+	isActive bool
+	isValid  bool
+	name     string
 }
 
-func NewDocument(id int, isActive bool, name string) (*Document, error ) {
-	log.Println("initiating document entity")
-	
-	docto := &Document{
-		id:         id,
-		isActive:   isActive,
-		isValid:    false,
-		name:       name,
-	}
-	err := docto.Validate()
+func NewDocument(id int, isActive bool, name string) (*Document, error) {
+	// log.Println("initiating document entity")
 
+	docto := &Document{
+		id:       id,
+		isActive: isActive,
+		isValid:  false,
+		name:     name,
+	}
+
+	err := docto.Validate()
 	if err != nil {
+		log.Printf("document: %s(id: %d) created with error: %s", name, id, err.Error())
 		return nil, err
 	}
+
+	log.Printf("document: %s(id: %d) created successfuly", name, id)
 	return docto, nil
 }
 

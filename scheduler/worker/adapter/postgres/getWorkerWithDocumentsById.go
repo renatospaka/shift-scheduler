@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"log"
 
-	entityDocto "github.com/renatospaka/scheduler/scheduler/document/core/entity"
 	"github.com/renatospaka/scheduler/scheduler/worker/core/entity"
+	doctoEntity "github.com/renatospaka/scheduler/scheduler/document/core/entity"
 )
 
 func (w *WorkerRepository) getWorkerWithDocumentsById(ctx context.Context, id int) (*entity.Worker, error) {
@@ -22,7 +22,7 @@ func (w *WorkerRepository) getWorkerWithDocumentsById(ctx context.Context, id in
 				d.is_active AS document_is_active
 	FROM "Worker" w 
 	LEFT JOIN "DocumentWorker" dw ON dw.worker_id = w.id
-	LEFT JOIN "Document" d ON d.id = dw.worker_id
+	LEFT JOIN "Document" d ON d.id = dw.document_id
 	WHERE w.id = $1`
 	stmt, err := w.DB.PrepareContext(ctx, query)
 	if err != nil {
@@ -51,15 +51,6 @@ func (w *WorkerRepository) getWorkerWithDocumentsById(ctx context.Context, id in
 			documentActive   sql.NullBool
 		)
 
-		/* 
-	SELECT w.name, 
-				w.profession, 
-				w.is_active, 
-				dw.id AS document_worker_id,
-				d.id AS document_id, 
-				d.name AS document_name, 
-				d.is_active AS document_is_active
-		*/
 		err = rows.Scan(
 			&name,
 			&profession,
@@ -75,8 +66,6 @@ func (w *WorkerRepository) getWorkerWithDocumentsById(ctx context.Context, id in
 			}
 		}
 
-		log.Println(id, active.Bool, name.String, profession.String, documentId.Int16, documentActive.Bool, documentName.String)
-
 		if count < 1 {
 			// mount the worker
 			worker, err = entity.NewWorker(id, active.Bool, name.String, profession.String)
@@ -86,15 +75,13 @@ func (w *WorkerRepository) getWorkerWithDocumentsById(ctx context.Context, id in
 		}
 
 		// mount the document to be linked to the worker
-		docto, err := entityDocto.NewDocument(int(documentId.Int16), documentActive.Bool, documentName.String)
-		// log.Printf("docto => .ID(): %d, .Name(): %s\n", docto.ID(), docto.Name())
+		docto, err := doctoEntity.NewDocument(int(documentId.Int16), documentActive.Bool, documentName.String)
 		if err != nil {
 			return nil, err
 		}
 
 		// link the document to the worker
 		workerDocto, err := entity.NewWorkerDocument(int(documentWorkerId.Int16), docto)
-		// log.Printf("workerDocto => .ID(): %d, .Document().ID(): %d, .Document().Name(): %s\n", workerDocto.ID(), workerDocto.Document().ID(), workerDocto.Document().Name())
 		if err != nil {
 			return nil, err
 		}
