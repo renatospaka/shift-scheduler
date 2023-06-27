@@ -1,0 +1,3 @@
+## Profiling the test coverage
+go test -coverprofile ./tests/cover.out ./...
+go tool cover -html=./tests/cover.out -o ./tests/cover.html
