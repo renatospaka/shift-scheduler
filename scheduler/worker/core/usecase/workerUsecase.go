@@ -4,26 +4,26 @@ import (
 	"context"
 	"log"
 
-	eventAdapter "github.com/renatospaka/scheduler/adapter/event"
-	"github.com/renatospaka/scheduler/scheduler/worker/core/event"
 	"github.com/renatospaka/scheduler/scheduler/worker/core/repository"
+	// "github.com/renatospaka/scheduler/scheduler/worker/core/event"
+	// eventAdapter "github.com/renatospaka/scheduler/adapter/event"
 )
 
 type WorkerUsecase struct {
 	ctx        context.Context
 	repo       repository.WorkerInterface
-	dispatcher *eventAdapter.EventDispatcher
+	// dispatcher *eventAdapter.EventDispatcher
 }
 
 // Start an instance of the usecases of the worker domain
-func NewWorkerUsecase(repo repository.WorkerInterface, dispatcher *eventAdapter.EventDispatcher) *WorkerUsecase {
+func NewWorkerUsecase(repo repository.WorkerInterface) *WorkerUsecase {
 	log.Println("initiating worker usecases")
 
 	usecases := &WorkerUsecase{
 		repo:       repo,
-		dispatcher: dispatcher,
+		// dispatcher: dispatcher,
 	}
-	usecases.dispatcher.AddListener(event.EVENT_WORKER_GOTTEN, event.NewWorkerGottenListener())
+	// usecases.dispatcher.AddListener(event.EVENT_WORKER_GOTTEN, event.NewWorkerGottenListener())
 
 	return usecases
 }

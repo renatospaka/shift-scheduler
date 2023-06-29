@@ -3,10 +3,10 @@ package usecase
 import (
 	"log"
 
+	pkgController "github.com/renatospaka/scheduler/adapter/web/controller"
 	"github.com/renatospaka/scheduler/core/dto"
 	"github.com/renatospaka/scheduler/scheduler/worker/core/entity"
-	eventWorker "github.com/renatospaka/scheduler/scheduler/worker/core/event"
-	pkgController "github.com/renatospaka/scheduler/adapter/web/controller"
+	// "github.com/renatospaka/scheduler/scheduler/worker/core/event"
 )
 
 type GetWorkerByIdInputDto struct {
@@ -16,6 +16,7 @@ type GetWorkerByIdInputDto struct {
 type GetWorkerByIdOutputDto struct {
 	ID                          int    `json:"worker_id"`
 	Name                        string `json:"name"`
+	Profession                  string `json:"profession"`
 	IsActive                    bool   `json:"is_active"`
 	dto.StandardStatusOutputDto `json:"request"`
 }
@@ -35,16 +36,18 @@ func (u *WorkerUsecase) getWorkerById(in GetWorkerByIdInputDto) (GetWorkerByIdOu
 	}
 
 	out := GetWorkerByIdOutputDto{
-		ID:                      worker.ID(),
-		Name:                    worker.Name(),
-		IsActive:                worker.IsActive(),
+		ID:         worker.ID(),
+		Name:       worker.Name(),
+		Profession: worker.Profession(),
+		IsActive:   worker.IsActive(),
 		StandardStatusOutputDto: dto.StandardStatusOutputDto{
 			Status: pkgController.REQUEST_SUCCESS,
 		},
 	}
 
-	workerGotten := eventWorker.NewWorkerGottenEvent("getting worker ID #" + string(rune(in.ID)))
-	u.dispatcher.Dispatch(workerGotten)
+	// No need for an event dispatcher at this moment
+	// workerGotten := event.NewWorkerGottenEvent("getting worker ID #" + string(rune(in.ID)))
+	// u.dispatcher.Dispatch(workerGotten)
 
 	return out, nil
 }

@@ -46,7 +46,7 @@ func (w *WorkerDomain) StartWorkDomain() error {
 	log.Println("initiating worker domain application")
 
 	w.repo = repository.NewWorkerRepository(w.domain.db)
-	w.usecases = usecase.NewWorkerUsecase(w.repo, w.dispatcher)
+	w.usecases = usecase.NewWorkerUsecase(w.repo)
 	w.usecases.SetContext(w.ctx)
 	w.controllers = controller.NewWorkerController(w.usecases)
 	w.routes = route.NewWorkerRoute(w.domain.webServer, w.controllers)
