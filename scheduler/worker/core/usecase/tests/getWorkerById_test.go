@@ -9,22 +9,34 @@ import (
 )
 
 func TestGetWorkerById(t *testing.T) {
-	// worker is not being mocked
-	worker, _ := entity.NewWorker(1, true, "Worker 1", "teacher")
-	
-	// repo is mocked
+	// using Worker Repository Mock to inject into the usecase
 	repo := new(workerRepositoryMock)
-	repo.On("GetWorker", 1).Return(worker, nil)
+	usecases := usecase.NewWorkerUsecase(repo)
 
-	// usecases uses the mocked repo
-	usecases := usecase.NewWorkerUsecase(repo, nil)
+	// execute the method as if the repo was the real one
 	in := usecase.GetWorkerByIdInputDto{ID: 1}
-	returnedWorker, err := usecases.GetWorkerById(in)
+	worker, err := usecases.GetWorkerById(in)
 	assert.Nil(t, err)
-	assert.NotNil(t, returnedWorker)
-	assert.Equal(t, worker.ID(), returnedWorker.ID)
-	assert.Equal(t, worker.Name(), returnedWorker.Name)
-	assert.Equal(t, worker.IsActive(), returnedWorker.IsActive)
+	assert.NotNil(t, worker)
+	assert.Equal(t, 1, worker.ID)
+	assert.Equal(t, "Worker 1", worker.Name)
+	assert.Equal(t, "teacher", worker.Profession)
+	assert.Equal(t, true, worker.IsActive)
+	assert.Equal(t, "success", worker.StandardStatusOutputDto.Status)
+}
 
-	repo.AssertExpectations(t)
+func TestGetWorkerById_NotFound(t *testing.T) {
+	// using Worker Repository Mock to inject into the usecase
+	repo := new(workerRepositoryMock)
+	usecases := usecase.NewWorkerUsecase(repo)
+
+	// execute the method as if the repo was the real one
+	in := usecase.GetWorkerByIdInputDto{ID: 0}
+	worker, err := usecases.GetWorkerById(in)
+	assert.NotNil(t, err)
+	assert.NotNil(t, worker)
+	assert.Equal(t, 0, worker.ID)
+	assert.Equal(t, "", worker.Name)
+	assert.Equal(t, "", worker.Profession)
+	assert.ErrorIs(t, err, entity.ErrWorkerIdInvalid)
 }

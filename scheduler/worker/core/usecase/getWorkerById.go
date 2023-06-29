@@ -29,10 +29,16 @@ func (u *WorkerUsecase) getWorkerById(in GetWorkerByIdInputDto) (GetWorkerByIdOu
 	}
 	worker, err := u.repo.GetWorker(in.ID)
 	if err != nil {
-		return GetWorkerByIdOutputDto{}, err
+		return GetWorkerByIdOutputDto{
+			StandardStatusOutputDto: dto.StandardStatusOutputDto{ Status: pkgController.REQUEST_FAILURE,
+			},
+		}, err
 	}
 	if worker == nil {
-		return GetWorkerByIdOutputDto{}, entity.ErrWorkerIdNotFound
+		return GetWorkerByIdOutputDto{
+			StandardStatusOutputDto: dto.StandardStatusOutputDto{ Status: pkgController.REQUEST_FAILURE,
+			},
+		}, entity.ErrWorkerIdNotFound
 	}
 
 	out := GetWorkerByIdOutputDto{

@@ -2,23 +2,27 @@ package tests
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/renatospaka/scheduler/scheduler/worker/core/entity"
-	"github.com/stretchr/testify/mock"
 )
 
 // Mocked Postgress repository
 // NOT TO BE CALLED under no circumstances out of the testing process
 type workerRepositoryMock struct {
-	mock.Mock
+	db *sql.DB
 }
 
 // Mocked method GetWorker of Worker's Repository
 // NOT TO BE CALLED under no circumstances out of the testing process
 func (w *workerRepositoryMock) GetWorker(id int) (*entity.Worker, error) {
-	wo, _ := entity.NewWorker(1, true, "Worker 1", "teacher")
-	return wo, nil
+	if id == 0 {
+		return nil, nil
+	}
+	
+	worker, _ := entity.NewWorker(1, true, "Worker 1", "teacher")
+	return worker, nil
 }
 
 // Mocked method GetWorkerWithDocuments of Worker's Repository
