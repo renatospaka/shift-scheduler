@@ -15,6 +15,7 @@ type GetWorkerWithDocumentsByIdInputDto struct {
 type GetWorkerWithDocumentsByIdOutputDto struct {
 	ID                          int                           `json:"worker_id"`
 	Name                        string                        `json:"name"`
+	Profession                  string                        `json:"profession"`
 	IsActive                    bool                          `json:"is_active"`
 	Documents                   []GetWorkerDocumentsOutputDto `json:"documents"`
 	dto.StandardStatusOutputDto `json:"request"`
@@ -46,10 +47,11 @@ func (u *WorkerUsecase) getWorkerWithDocumentsById(in GetWorkerWithDocumentsById
 	}
 
 	out := GetWorkerWithDocumentsByIdOutputDto{
-		ID:        worker.ID(),
-		Name:      worker.Name(),
-		IsActive:  worker.IsActive(),
-		Documents: []GetWorkerDocumentsOutputDto{},
+		ID:         worker.ID(),
+		Name:       worker.Name(),
+		Profession: worker.Profession(),
+		IsActive:   worker.IsActive(),
+		Documents:  []GetWorkerDocumentsOutputDto{},
 		StandardStatusOutputDto: dto.StandardStatusOutputDto{
 			Status: pkgController.REQUEST_SUCCESS,
 		},
