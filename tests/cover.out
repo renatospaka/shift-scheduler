@@ -1,5 +1,0 @@
-mode: set
-github.com/renatospaka/scheduler/adapter/event/test/mocEvent.go:7.37,9.2 1 1
-github.com/renatospaka/scheduler/adapter/event/test/mocEvent.go:11.43,14.2 2 1
-github.com/renatospaka/scheduler/adapter/event/test/mocListener.go:8.39,11.2 2 1
-github.com/renatospaka/scheduler/adapter/event/test/mocListener.go:13.50,15.2 1 1

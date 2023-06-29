@@ -59,6 +59,8 @@
 				
 				<option value="file1">github.com/renatospaka/scheduler/adapter/event/test/mocListener.go (100.0%)</option>
 				
+				<option value="file2">github.com/renatospaka/scheduler/scheduler/worker/core/usecase/tests/mocRepository.go (80.0%)</option>
+				
 				</select>
 			</div>
 			<div id="legend">
@@ -73,14 +75,20 @@
 		
 		<pre class="file" id="file0" style="display: none">package test
 
+// Mocked Event adapter
+// NOT TO BE CALLED under no circumstances out of the testing process
 type testEvent struct {
         data any
 }
 
+// Mocked method GetKey of an event
+// NOT TO BE CALLED under no circumstances out of the testing process
 func (e *testEvent) GetKey() string <span class="cov8" title="1">{
         return "event 1"
 }</span>
 
+// Mocked method GetData of an event
+// NOT TO BE CALLED under no circumstances out of the testing process
 func (e *testEvent) GetData() interface{} <span class="cov8" title="1">{
         e.data = "event 1"
         return e.data
@@ -101,6 +109,59 @@ func (l *testListener) Handle() error <span class="cov8" title="1">{
 
 func (l *testListener) SetData(data interface{}) <span class="cov8" title="1">{
         l.data = data
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package tests
+
+import (
+        "context"
+        "database/sql"
+        "fmt"
+
+        "github.com/renatospaka/scheduler/scheduler/worker/core/entity"
+        doctoEntity "github.com/renatospaka/scheduler/scheduler/document/core/entity"
+)
+
+// Mocked Postgress repository
+// NOT TO BE CALLED under no circumstances out of the testing process
+type workerRepositoryMock struct {
+        db *sql.DB
+}
+
+// Mocked method GetWorker of Worker's Repository
+// NOT TO BE CALLED under no circumstances out of the testing process
+func (w *workerRepositoryMock) GetWorker(id int) (*entity.Worker, error) <span class="cov8" title="1">{
+        if id == 0 </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+
+        <span class="cov8" title="1">worker, _ := entity.NewWorker(1, true, "Worker 1", "teacher")
+        return worker, nil</span>
+}
+
+
+// Mocked method GetWorkerWithDocuments of Worker's Repository
+// NOT TO BE CALLED under no circumstances out of the testing process
+func (w *workerRepositoryMock) GetWorkerWithDocuments(id int) (*entity.Worker, error) <span class="cov8" title="1">{
+        if id == 0 </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+
+        <span class="cov8" title="1">worker, _ := entity.NewWorker(1, true, "Worker 1", "teacher")
+        document1, _ := doctoEntity.NewDocument(71, true, "document 71")
+        wrkerDocto1, _ := entity.NewWorkerDocument(1, document1)
+        worker.LinkToDocument(wrkerDocto1)
+        document2, _ := doctoEntity.NewDocument(2312, true, "document 2312")
+        wrkerDocto2, _ := entity.NewWorkerDocument(2, document2)
+        worker.LinkToDocument(wrkerDocto2)
+        return worker, nil</span>
+}
+
+// Mocked method GetWorkerWithDocuments of Worker's Repository
+// NOT TO BE CALLED under no circumstances out of the testing process
+func (w *workerRepositoryMock) SetContext(ctx context.Context) <span class="cov0" title="0">{
+        fmt.Println("Setting the Context")
 }</span>
 </pre>
 		
