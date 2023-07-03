@@ -1,12 +1,12 @@
-package tests
+package test
 
 import (
 	"context"
 	"database/sql"
 	"fmt"
 
-	"github.com/renatospaka/scheduler/scheduler/worker/core/entity"
 	doctoEntity "github.com/renatospaka/scheduler/scheduler/document/core/entity"
+	"github.com/renatospaka/scheduler/scheduler/worker/core/entity"
 )
 
 // Mocked Postgress repository
@@ -25,7 +25,6 @@ func (w *workerRepositoryMock) GetWorker(id int) (*entity.Worker, error) {
 	worker, _ := entity.NewWorker(1, true, "Worker 1", "teacher")
 	return worker, nil
 }
-
 
 // Mocked method GetWorkerWithDocuments of Worker's Repository
 // NOT TO BE CALLED under no circumstances out of the testing process
